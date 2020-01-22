@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Created on Sun Jan 19 21:49:40 2020
+Created on Mon Jan 20 21:49:40 2020
 
 @author: jose
 """
@@ -20,21 +20,14 @@ howmany = 0
 
 html = urllib.request.urlopen(URL, context=ctx).read()
 
-# =============================================================================
-# while True:
-#     info = html.read(8192)
-#     print(info)
-#     if len(info) < 1: break
-# =============================================================================
-
 soup = BeautifulSoup(html, 'html.parser')
 
 # Retrieve all of the anchor tags
-#tags = soup.findAll("span", {"class": "price-standard"})
-tags = soup.findAll("div", {"itemprop": "offers"})
+tags = soup.findAll("span", {"class": "price-standard"})
 
 for tag in tags:
-    print(tag)
+    prices_tags = tag.find_parent('div').findChildren('span')
+    print("Price savings : $", format(float(prices_tags[0].text[2:]) - float(prices_tags[1].text[2:]), ',.2f'))
     howmany = howmany + 1
 
 print("We found " + str(howmany) + " anchors")
